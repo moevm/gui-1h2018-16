@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/arrow-keys.png</file>
+        <file>img/game-over-bg.png</file>
+        <file>img/game-wrap-bg.png</file>
+        <file>img/nav-button.png</file>
+        <file>img/restart-icon.png</file>
+        <file>img/basket/basket-p-0-0.png</file>
+        <file>img/basket/basket-p-0-1.png</file>
+        <file>img/basket/basket-p-1-0.png</file>
+        <file>img/basket/basket-p-1-1.png</file>
+        <file>img/egg/egg.png</file>
+        <file>img/loss/loss.png</file>
+        <file>img/score/num-bg.png</file>
+        <file>img/score/nums.png</file>
+        <file>img/wolf/wolf-p-0.png</file>
+        <file>img/wolf/wolf-p-1.png</file>
+        <file>bg.jpg</file>
+        <file>img/game-bg.jpg</file>
+    </qresource>
+</RCC>
