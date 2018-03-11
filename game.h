@@ -5,39 +5,32 @@
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 
-#define MAX_SPEED 10;
+#define MAX_SPEED 2;
+#define LAYER_LEN 5;
+
+class Egg
+{
+public:
+    int layer,
+        pos,
+        speed;
+
+    Egg(int layer, int speed);
+    ~Egg();
+
+};
 
 class Game
 {
 private:
-    int speed,
-        score,
-        life;
+    int chance = 10,
+        score = 0,
+        life = 3;
 
-    class Wolf : public QGraphicsPixmapItem{
-    public:
-        bool left;
-        Wolf();
-    };
+    bool style;
 
-    class Basket : public QGraphicsPixmapItem{
-    public:
-        bool top;
-        Basket();
-    };
-
-    class Egg : public QGraphicsPixmapItem{
-    private:
-        int layer,
-        pos,
-        speed;
-    public:
-        Egg(int layer, int speed);
-        ~Egg();
-
-        void falling();
-
-    };
+    bool player_wolf,
+         player_basket;
 
     void CollectEgg();
     void LostEgg();
@@ -45,17 +38,17 @@ private:
     void GameOver();
 
 public:
-    Game();
+    Game(bool typeA);
+    QVector<Egg*> *eggs;
 
-    void Play(int key);
+    void newEgg();
+    void tapEvent(bool left_wolf, bool top_basket);
 
-    QVector<Egg> eggs;
-
-    void setPlayerPos(int key);
     int getPlayerPos();
-
     int getScore();
     int getLife();
+public slots:
+    void Play();
 };
 
 #endif // GAME_H
