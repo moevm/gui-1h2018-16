@@ -18,20 +18,12 @@ namespace Ui {
 
 class Wolf : public QGraphicsPixmapItem{
 public:
-    Wolf();
-    bool left = true;
-    void advance(int phase);
-protected:
-    void keyPressEvent(QKeyEvent *event);
+    Wolf(bool left);
 };
 
 class Basket : public QGraphicsPixmapItem{
 public:
-    Basket();
-    bool top = true;
-    void advance(int phase);
-protected:
-    void keyPressEvent(QKeyEvent *event);
+    Basket(int pos);
 };
 
 class MainWindow : public QMainWindow
@@ -46,7 +38,12 @@ private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
 
+    Game* game;
     QTimer* gameLoop;
+
+    // QWidget interface
+protected:
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // MAINWINDOW_H

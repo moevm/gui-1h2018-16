@@ -1,13 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#define WOLF_LEFT 140
-#define WOLF_RIGHT 240
-#define WOLF_Y 198
-
-Game *game;
-Wolf *wolf;
-Basket *basket;
+#define WOLF_LEFT 180
+#define WOLF_RIGHT 296
+#define WOLF_Y 165
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,11 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addPixmap(QPixmap(":/img/game-bg.jpg"));
 
     game = new Game(true);
-    wolf = new Wolf();
-    basket = new Basket();
-
-    scene->addItem(wolf);
-    scene->addItem(basket);
 
     /*gameLoop = new QTimer(this);
     connect(gameLoop, SIGNAL(timeout()),
@@ -39,70 +30,73 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-Wolf::Wolf() : QGraphicsPixmapItem(0)
+void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    setPixmap(QPixmap(":/img/wolf/wolf-p-0.png"));
-    setPos(WOLF_LEFT, WOLF_Y);
-    setFlag(QGraphicsItem::ItemIsFocusable);
-    setFocus();
-}
+    bool wolf_x;
+    int basket_pos;
 
-void Wolf::advance(int phase)
-{
-    if(phase){
-        if(left){
-            setPixmap(QPixmap(":/img/wolf/wolf-p-0.png"));
-            setPos(WOLF_LEFT, WOLF_Y);
-        }else{
-            setPixmap(QPixmap(":/img/wolf/wolf-p-1.png"));
-            setPos(WOLF_RIGHT, WOLF_Y);
-        }
-    }
-}
-
-void Wolf::keyPressEvent(QKeyEvent *event)
-{
     switch (event->key()) {
-    case 97:
-    case 103:
-        left = true;
-        game->tapEvent(true, basket->top);
+    case Qt::Key_A:
+        wolf_x = true;
+        basket_pos = 1;
+        game->tapEvent(true, false);
         break;
-    case 99:
-    case 105:
-        left = false;
-        game->tapEvent(false, basket->top);
+    case Qt::Key_Q:
+        wolf_x = true;
+        basket_pos = 2;
+        game->tapEvent(true, true);
+        break;
+    case Qt::Key_D:
+        wolf_x = false;
+        basket_pos = 3;
+        game->tapEvent(false, false);
+        break;
+    case Qt::Key_E:
+        wolf_x = false;
+        basket_pos = 4;
+        game->tapEvent(true, true);
         break;
     default:
+        return;
         break;
+    }
+
+    scene->clear();
+    scene->addPixmap(QPixmap(":/img/game-bg.jpg"));
+
+    scene->addItem(new Wolf(wolf_x));
+    scene->addItem(new Basket(basket_pos));
+}
+
+Wolf::Wolf(bool left) : QGraphicsPixmapItem(0)
+{
+    if(left){
+        setPixmap(QPixmap(":/img/wolf/wolf-p-0.png"));
+        setPos(WOLF_LEFT, WOLF_Y);
+    }else{
+        setPixmap(QPixmap(":/img/wolf/wolf-p-1.png"));
+        setPos(WOLF_RIGHT, WOLF_Y);
     }
 }
 
-Basket::Basket() : QGraphicsPixmapItem(0)
+Basket::Basket(int pos) : QGraphicsPixmapItem(0)
 {
-    setPixmap(QPixmap(":/img/basket/basket-p-0-1.png"));
-    setPos(100, 150);
-    setFlag(QGraphicsItem::ItemIsFocusable);
-    setFocus();
-}
-
-void Basket::advance(int phase)
-{
-
-}
-
-void Basket::keyPressEvent(QKeyEvent *event)
-{
-    switch (event->key()) {
-    case 103:
-    case 105:
-        top = true;
-        game->tapEvent(wolf->left, true);
+    switch (pos) {
+    case 1:
+        setPixmap(QPixmap(":/img/basket/basket-p-0-0.png"));
+        setPos(125, 236);
         break;
-    case 97:
-    case 99:
-        top = false;
-        game->tapEvent(wolf->left, false);
+    case 2:
+        setPixmap(QPixmap(":/img/basket/basket-p-0-1.png"));
+        setPos(131, 160);
+        break;
+    case 3:
+        setPixmap(QPixmap(":/img/basket/basket-p-1-0.png"));
+        setPos(361, 242);
+        break;
+    case 4:
+        setPixmap(QPixmap(":/img/basket/basket-p-1-1.png"));
+        setPos(370, 167);
         break;
     default:
         break;
