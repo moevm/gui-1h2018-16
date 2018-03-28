@@ -17,5 +17,8 @@
         <file>img/wolf/wolf-p-1.png</file>
         <file>bg.jpg</file>
         <file>img/game-bg.jpg</file>
+        <file>img/button.png</file>
+        <file>sounds/tap.wav</file>
+        <file>sounds/sound.wav</file>
     </qresource>
 </RCC>

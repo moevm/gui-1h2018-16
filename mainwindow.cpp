@@ -16,7 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     scene->addPixmap(QPixmap(":/img/game-bg.jpg"));
 
-    game = new Game(true);
+    play = false;
+
+    ui->label_2->setStyleSheet("color: yellow");
+    bg_sound = new QMediaPlayer();
+    bg_sound->setMedia(QUrl("qrc:/sounds/sound.wav"));
+    tap_sound = new QMediaPlayer();
+    tap_sound->setMedia(QUrl("qrc:/sounds/tap.wav"));
 
     /*gameLoop = new QTimer(this);
     connect(gameLoop, SIGNAL(timeout()),
@@ -30,12 +36,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
+void MainWindow::movePlayer(int key){
+    if(!play) return;
+
+    tap_sound->play();
+
     bool wolf_x;
     int basket_pos;
 
-    switch (event->key()) {
+    switch (key) {
     case Qt::Key_A:
         wolf_x = true;
         basket_pos = 1;
@@ -66,6 +75,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     scene->addItem(new Wolf(wolf_x));
     scene->addItem(new Basket(basket_pos));
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    movePlayer(event->key());
 }
 
 Wolf::Wolf(bool left) : QGraphicsPixmapItem(0)
@@ -100,5 +114,47 @@ Basket::Basket(int pos) : QGraphicsPixmapItem(0)
         break;
     default:
         break;
+    }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    movePlayer(Qt::Key_Q);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    movePlayer(Qt::Key_A);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    movePlayer(Qt::Key_E);
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    movePlayer(Qt::Key_D);
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    if(!play){
+        game = new Game(true);
+        play = true;
+
+        ui->label_3->setStyleSheet("color: yellow");
+        bg_sound->play();
+    }
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    if(!play){
+        game = new Game(false);
+        play = true;
+
+        ui->label_3->setStyleSheet("color: yellow");
+        bg_sound->play();
     }
 }
