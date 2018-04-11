@@ -38,3 +38,5 @@ FORMS += \
 
 RESOURCES += \
     images.qrc
+
+CONFIG += console

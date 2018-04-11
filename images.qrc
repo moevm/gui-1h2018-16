@@ -20,5 +20,8 @@
         <file>img/button.png</file>
         <file>sounds/tap.wav</file>
         <file>sounds/sound.wav</file>
+        <file>img/button_tap.png</file>
+        <file>img/egg/egg-r.png</file>
+        <file>sounds/egg.wav</file>
     </qresource>
 </RCC>
