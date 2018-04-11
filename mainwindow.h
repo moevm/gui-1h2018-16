@@ -57,6 +57,8 @@ private:
 
     // QWidget interface
 protected:
+    void newGame(bool type);
+
     void keyPressEvent(QKeyEvent *event);
     void movePlayer(int key);
 

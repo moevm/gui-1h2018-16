@@ -191,29 +191,21 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    if(!play){
-        game = new Game(true, this);
-        gameLoop->start(LOOP);
-
-        connect(game, SIGNAL(collectEgg()), egg_sound, SLOT(play()));
-        //connect(game, &Game::collectEgg, egg_sound, &QMediaPlayer::play);
-
-        ui->label_3->setStyleSheet("color: yellow");
-        bg_sound->play();
-
-        play = true;
-    }
+    newGame(true);
 }
 
 void MainWindow::on_pushButton_6_clicked()
 {
+    newGame(false);
+}
+
+void MainWindow::newGame(bool type)
+{
     if(!play){
-        game = new Game(false, this);
+        game = new Game(type, this);
         gameLoop->start(LOOP);
 
         connect(game, SIGNAL(collectEgg()), egg_sound, SLOT(play()));
-        //connect(game, &Game::collectEgg, egg_sound, &QMediaPlayer::play);
-
         ui->label_3->setStyleSheet("color: yellow");
         bg_sound->play();
 
