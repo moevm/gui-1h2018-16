@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <QObject>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -17,13 +18,13 @@ public:
 
     Egg(int layer, int speed);
     ~Egg();
-
 };
 
-class Game
+class Game : public QObject
 {
+    Q_OBJECT
 private:
-    int chance = 10,
+    int chance = 5,
         score = 0,
         life = 3;
 
@@ -32,23 +33,22 @@ private:
     bool player_wolf,
          player_basket;
 
-    void CollectEgg();
-    void LostEgg();
+    bool takeIt(int layer);
 
     void GameOver();
-
 public:
-    Game(bool typeA);
+    explicit Game(bool typeA, QObject *parent = 0);
+    virtual ~Game(){};
+
     QVector<Egg*> *eggs;
 
-    void newEgg();
+    void Play();
     void tapEvent(bool left_wolf, bool top_basket);
 
-    int getPlayerPos();
     int getScore();
     int getLife();
-public slots:
-    void Play();
+signals:
+    void collectEgg();
 };
 
 #endif // GAME_H

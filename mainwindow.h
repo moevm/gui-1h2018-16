@@ -28,6 +28,11 @@ public:
     Basket(int pos);
 };
 
+class G_Egg : public QGraphicsPixmapItem{
+public:
+    G_Egg(int x, int y);
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -43,15 +48,22 @@ private:
     Game* game;
     QTimer* gameLoop;
     QMediaPlayer *bg_sound;
-    QMediaPlayer *tap_sound;
+    QMediaPlayer *game_sound;
+    QMediaPlayer *egg_sound;
 
+    bool wolf_x;
+    int basket_pos;
     bool play;
 
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event);
     void movePlayer(int key);
+
+    void Render();
 private slots:
+    void Play();
+
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
