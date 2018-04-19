@@ -39,8 +39,6 @@ FORMS += \
 RESOURCES += \
     images.qrc
 
--CONFIG += console
-
 DISTFILES += \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \

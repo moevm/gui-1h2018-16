@@ -16,6 +16,12 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>1147</width>
+    <height>613</height>
+   </size>
+  </property>
   <property name="maximumSize">
    <size>
     <width>1147</width>
@@ -240,60 +246,32 @@ background-repeat: none;
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QGraphicsView" name="graphicsView_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>30</y>
-      <width>61</width>
-      <height>61</height>
+      <x>45</x>
+      <y>50</y>
+      <width>31</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>64</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
     <property name="styleSheet">
-     <string notr="true">#label_2{
-color: black
-}</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
-    </property>
-    <property name="text">
-     <string>•</string>
+     <string notr="true">background: transparent;
+border: 0;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QGraphicsView" name="graphicsView_3">
     <property name="geometry">
      <rect>
-      <x>1072</x>
-      <y>63</y>
-      <width>61</width>
-      <height>61</height>
+      <x>1076</x>
+      <y>85</y>
+      <width>31</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>64</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
     <property name="styleSheet">
-     <string notr="true">#label_3{
-color: black
-}</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
-    </property>
-    <property name="text">
-     <string>•</string>
+     <string notr="true">background: transparent;
+border: 0;</string>
     </property>
    </widget>
   </widget>
