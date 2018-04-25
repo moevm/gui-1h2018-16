@@ -1,5 +1,4 @@
 #include "game.h"
-#include <QDebug>
 
 Game::Game(bool typeA, QObject *parent) : QObject(parent)
 {
@@ -40,7 +39,7 @@ bool Game::takeIt(int layer)
 
 void Game::Play()
 {
-    bool new_egg = rand()%chance + 1 == 3;
+    bool new_egg = rand()%chance + 1 == 2;
     if(eggs->length() < 5 && new_egg){
         int r_layer = style ? 4 : 3;
         eggs->push_back(new Egg(rand()%r_layer + 1, 1));
@@ -55,6 +54,11 @@ void Game::Play()
                 emit collectEgg();
             }else{
                 life--;
+                if(life <= 0)
+                    emit GameOver();
+                else
+                    emit lostEgg(eggs->value(i)->layer == 1 || eggs->value(i)->layer == 2);
+
             }
 
             eggs->remove(i);
@@ -64,8 +68,6 @@ void Game::Play()
 
 Egg::Egg(int layer, int speed)
 {
-    qDebug() << "New egg on" << layer << "layer";
-
     this->layer = layer;
     this->pos = 1;
     this->speed = speed;

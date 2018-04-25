@@ -24,7 +24,7 @@ class Game : public QObject
 {
     Q_OBJECT
 private:
-    int chance = 5,
+    int chance = 3,
         score = 0,
         life = 3;
 
@@ -34,8 +34,6 @@ private:
          player_basket;
 
     bool takeIt(int layer);
-
-    void GameOver();
 public:
     explicit Game(bool typeA, QObject *parent = 0);
     virtual ~Game(){};
@@ -49,6 +47,8 @@ public:
     int getLife();
 signals:
     void collectEgg();
+    void lostEgg(bool left);
+    void GameOver();
 };
 
 #endif // GAME_H

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
 
-#define LOOP 1000
+#define LOOP 750
+#define INDICATOR_SIZE 31
 
 #define WOLF_LEFT 180
 #define WOLF_RIGHT 296
@@ -19,14 +19,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->label->setPixmap(QPixmap(":/bg.jpg"));
 
+    //Main display
     scene = new QGraphicsScene(0, 0, 572, 350, this);
     ui->graphicsView->setScene(scene);
-    scene->addPixmap(QPixmap(":/img/game-bg.jpg"));
+    scene->addPixmap(QPixmap(":/img/logo.png"));
 
-    play = false;
+    //Indicators
+    indicator1 = new QGraphicsScene(0, 0, 31, 31);
+    indicator2 = new QGraphicsScene(0, 0, 31, 31);
+    ui->graphicsView_2->setScene(indicator1);
+    ui->graphicsView_3->setScene(indicator2);
 
-    ui->label_2->setStyleSheet("color: yellow");
+    indicator1->addItem(new Indicator());
 
+    //Sounds
     bg_sound = new QMediaPlayer(this);
     bg_sound->setMedia(QUrl("qrc:/sounds/sound.wav"));
 
@@ -36,6 +42,10 @@ MainWindow::MainWindow(QWidget *parent) :
     egg_sound = new QMediaPlayer(this);
     egg_sound->setMedia(QUrl("qrc:/sounds/egg.wav"));
 
+    lost_egg_sound = new QMediaPlayer(this);
+    lost_egg_sound->setMedia(QUrl("qrc:/sounds/lost_egg.wav"));
+
+    //Game
     gameLoop = new QTimer(this);
     connect(gameLoop, SIGNAL(timeout()),
             this, SLOT(Play()));
@@ -72,6 +82,22 @@ void MainWindow::Render()
         //New egg
         scene->addItem(new G_Egg(ex, ey));
     }
+
+    //Chiks
+    for(int i = 0; i < game->getLife(); i++){
+        scene->addItem(new Chick(326 + i*40));
+    }
+
+    //Lost egg
+    if(tmp_lost_egg)
+        scene->addItem(new Splinter(tmp_lost_egg == 1));
+    tmp_lost_egg = 0;
+
+    //Score
+    QGraphicsTextItem * io = new QGraphicsTextItem;
+    io->setPos(250,40);
+    io->setHtml("<font face='Consolas' size='48'>" + QString::number(game->getScore()) + "</font>");
+    scene->addItem(io);
 }
 
 void MainWindow::movePlayer(int key){
@@ -113,10 +139,30 @@ void MainWindow::movePlayer(int key){
 void MainWindow::Play()
 {
     game->Play();
-    qDebug() << "Score: " << game->getScore() << " | lifes: " << game->getLife();
-    //Game over check...
-
     Render();
+
+    if(game->getScore() >= 5 && game->getScore() < 10)
+        gameLoop->setInterval(500);
+    else if(game->getScore() > 10)
+        gameLoop->setInterval(250);
+}
+
+void MainWindow::lostEgg(bool left)
+{
+    lost_egg_sound->play();
+    tmp_lost_egg = left ? 1 : 2;
+}
+
+void MainWindow::GameOver()
+{
+    gameLoop->stop();
+    bg_sound->stop();
+    indicator2->clear();
+
+    //scene->clear();
+    //scene->addPixmap(QPixmap(":/img/GameOver.png"));
+
+    play = false;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -144,7 +190,7 @@ Basket::Basket(int pos) : QGraphicsPixmapItem(0)
         break;
     case 2:
         setPixmap(QPixmap(":/img/basket/basket-p-0-1.png"));
-        setPos(131, 160);
+        setPos(128, 158);
         break;
     case 3:
         setPixmap(QPixmap(":/img/basket/basket-p-1-0.png"));
@@ -199,6 +245,31 @@ void MainWindow::on_pushButton_6_clicked()
     newGame(false);
 }
 
+Indicator::Indicator() : QGraphicsEllipseItem(0)
+{
+    QColor color = QColor(255, 222, 0);
+    setBrush(color);
+    setRect(0, 0, INDICATOR_SIZE, INDICATOR_SIZE);
+    setPos(0, 0);
+}
+
+Chick::Chick(int x) : QGraphicsPixmapItem(0)
+{
+    setPixmap(QPixmap(":/img/loss/loss.png"));
+    setPos(x, 114);
+}
+
+Splinter::Splinter(bool left) : QGraphicsPixmapItem(0)
+{
+    if(left){
+        setPixmap(QPixmap(":/img/loss/lost_egg_l.png"));
+        setPos(93, 312);
+    }else{
+        setPixmap(QPixmap(":/img/loss/lost_egg_r.png"));
+        setPos(443, 312);
+    }
+}
+
 void MainWindow::newGame(bool type)
 {
     if(!play){
@@ -206,8 +277,12 @@ void MainWindow::newGame(bool type)
         gameLoop->start(LOOP);
 
         connect(game, SIGNAL(collectEgg()), egg_sound, SLOT(play()));
-        ui->label_3->setStyleSheet("color: yellow");
+        connect(game, SIGNAL(lostEgg(bool)), this, SLOT(lostEgg(bool)));
+        connect(game, SIGNAL(GameOver()), this, SLOT(GameOver()));
+
+        indicator2->addItem(new Indicator());
         bg_sound->play();
+        Render();
 
         play = true;
     }

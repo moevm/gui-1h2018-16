@@ -33,6 +33,21 @@ public:
     G_Egg(int x, int y);
 };
 
+class Chick : public QGraphicsPixmapItem{
+public:
+    Chick(int x);
+};
+
+class Splinter : public QGraphicsPixmapItem{
+public:
+    Splinter(bool left);
+};
+
+class Indicator : public QGraphicsEllipseItem{
+public:
+   Indicator();
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -43,17 +58,14 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *scene;
+    QGraphicsScene *scene, *indicator1, *indicator2;
 
     Game* game;
     QTimer* gameLoop;
-    QMediaPlayer *bg_sound;
-    QMediaPlayer *game_sound;
-    QMediaPlayer *egg_sound;
+    QMediaPlayer *bg_sound, *game_sound, *egg_sound, *lost_egg_sound;
 
-    bool wolf_x;
-    int basket_pos;
-    bool play;
+    bool wolf_x = true, play = false;
+    int basket_pos = 1, tmp_lost_egg = 0;
 
     // QWidget interface
 protected:
@@ -65,6 +77,8 @@ protected:
     void Render();
 private slots:
     void Play();
+    void lostEgg(bool left);
+    void GameOver();
 
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
