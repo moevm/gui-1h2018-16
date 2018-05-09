@@ -21,5 +21,7 @@
         <file>img/loss/lost_egg_r.png</file>
         <file>img/logo.png</file>
         <file>img/GameOver.png</file>
+        <file>img/records-bg.png</file>
+        <file>fonts/rc.ttf</file>
     </qresource>
 </RCC>
