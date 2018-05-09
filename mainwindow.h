@@ -11,12 +11,24 @@
 
 #include <QTimer>
 #include <QKeyEvent>
+#include <QTime>
+
+#include <set>
+#include <algorithm>
 
 #include "game.h"
 
 namespace Ui {
     class MainWindow;
 }
+
+struct srt
+{
+    bool operator ()(const std::pair<QString, int> &a, const std::pair<QString, int> &b)
+    {
+        return a.second > b.second;
+    }
+};
 
 class Wolf : public QGraphicsPixmapItem{
 public:
@@ -55,6 +67,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    std::set<std::pair<QString, int>, srt> *records;
 
 private:
     Ui::MainWindow *ui;
@@ -70,6 +83,7 @@ private:
     // QWidget interface
 protected:
     void newGame(bool type);
+    void writeRecord(int r);
 
     void keyPressEvent(QKeyEvent *event);
     void movePlayer(int key);
@@ -86,6 +100,7 @@ private slots:
     void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
     void on_pushButton_6_clicked();
+    void on_pushButton_7_clicked();
 };
 
 #endif // MAINWINDOW_H

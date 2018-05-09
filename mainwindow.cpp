@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "recordsform.h"
 
 #define LOOP 750
 #define INDICATOR_SIZE 31
@@ -44,6 +45,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     lost_egg_sound = new QMediaPlayer(this);
     lost_egg_sound->setMedia(QUrl("qrc:/sounds/lost_egg.wav"));
+
+    //Records
+    records = new std::set<std::pair<QString, int>, srt>;
+    QFile inputFile("records.txt");
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&inputFile);
+       while (!in.atEnd())
+       {
+          QStringList line = in.readLine().split("$");
+          records->insert(std::pair<QString, int>(line[0],line[1].toInt()));
+       }
+       inputFile.close();
+    }
 
     //Game
     gameLoop = new QTimer(this);
@@ -161,6 +176,8 @@ void MainWindow::GameOver()
 
     //scene->clear();
     //scene->addPixmap(QPixmap(":/img/GameOver.png"));
+
+    writeRecord(game->getScore());
 
     play = false;
 }
@@ -286,4 +303,30 @@ void MainWindow::newGame(bool type)
 
         play = true;
     }
+}
+
+void MainWindow::writeRecord(int r)
+{
+    QTime currTime = QTime::currentTime();
+    records->insert(std::pair<QString, int>(currTime.toString("hh:mm:ss"), r));
+
+    QFile file("records.txt");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream ts(&file);
+
+        for ( std::set<std::pair<QString, int>>::const_iterator it = records->begin();
+             it != records->end();
+             it++)
+        {
+            ts << it->first << "$" << it->second << "\n";
+        }
+    }
+    file.close();
+}
+
+void MainWindow::on_pushButton_7_clicked()
+{
+    RecordsForm rf;
+    rf.setModal(true);
+    rf.exec();
 }

@@ -27,14 +27,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    game.cpp
+    game.cpp \
+    recordsform.cpp
 
 HEADERS += \
         mainwindow.h \
-    game.h
+    game.h \
+    recordsform.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    recordsform.ui
 
 RESOURCES += \
     images.qrc
